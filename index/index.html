@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite de Aniversário!</title>
+    <link rel="stylesheet" href="../style/style.css"> <!-- Caminho corrigido para o CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1>Festa de 15 Anos - Dani e Gabi!</h1>
+        <p>Mas antes de descobrir os detalhes, resolva este enigma:</p>
+        
+        <div class="enigma">
+            <p id="perguntaEnigma">O que é, o que é? Tem cidades, mas não casas; tem montanhas, mas não árvores; e tem água, mas não peixes?</p>
+            <input type="text" id="respostaEnigma" placeholder="Sua resposta">
+            <button id="botaoVerificar">Revelar Detalhes!</button>
+            <p id="feedback" class="feedback"></p>
+        </div>
+        
+        <div id="detalhesFesta" class="hidden">
+            <h2>Parabéns, você desvendou o enigma!</h2>
+            <p>Aqui estão os detalhes da festa:</p>
+            
+            <div class="video-container">
+                <!-- IMPORTANTE: Substitua o link abaixo pelo link do SEU vídeo! -->
+                <!-- Exemplo do YouTube: -->
+                <!--<iframe width="560" height="315" src="D:\AniversarioGabiDani15\video\202406-08-0.mp4 title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+-->
+                <!--Ou, se preferir usar um vídeo local (menos prático para compartilhar online):-->
+                <video id="videoAniversario" width="560" height="315" controls autoplay>
+                    <source src="../video/teste.mp4" type="video/mp4"> 
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+                
+            </div>
+            
+            <div class="endereco">
+                <h3>Local da Festa:</h3>
+                <p>Rua da Alegria, nº 123, Bairro Feliz</p>
+                <p>Cidade Incrível - UF</p>
+                <p>Data: DD/MM/AAAA</p>
+                <p>Horário: HH:MM</p>
+                
+                <a href="https://wa.me/41991526177?text=Huhull Confirmando minha presença na festa de 15 anos da Dani e da Gabi, festaa 15Zou .. Gabi e Dani" target="_blank" class="whatsapp-button">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/150px-WhatsApp.svg.png" alt="WhatsApp Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                    Confirmar Presença
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../main/script.js"></script>
+</body>
+</html>

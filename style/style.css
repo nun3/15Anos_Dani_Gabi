@@ -1,0 +1,263 @@
+:root {
+    --cor-primaria: #ff69b4; /* Rosa choque */
+    --cor-primaria-escura: #ff1493; /* Rosa choque mais escuro */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #f0f8ff; /* Azul céu bem clarinho */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    position: relative; /* Para garantir que o z-index funcione */
+    z-index: 10;      /* Para ficar na frente dos balões */
+}
+
+h1 {
+    color: var(--cor-primaria);
+    font-size: 2em;
+}
+
+h2 {
+    color: #32cd32; /* Verde limão */
+}
+
+.enigma p#perguntaEnigma {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+#respostaEnigma {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(70% - 22px); /* Ajuste para caber ao lado do botão */
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: var(--cor-primaria);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--cor-primaria-escura);
+}
+
+button:focus {
+    outline: 2px solid var(--cor-primaria-escura);
+    outline-offset: 2px;
+    background-color: var(--cor-primaria-escura); /* Opcional: manter consistência com hover */
+}
+
+.hidden {
+    display: none;
+}
+
+#detalhesFesta {
+    margin-top: 30px;
+    border-top: 2px dashed #ffc0cb; /* Rosa claro */
+    padding-top: 20px;
+}
+
+.video-container {
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 56.25%; /* Proporção 16:9 para o vídeo responsivo */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.video-container iframe,
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.endereco {
+    background-color: #e6e6fa; /* Lavanda claro */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.endereco h3 {
+    color: #483d8b; /* Azul ardósia escuro */
+    margin-top: 0;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    min-height: 1.2em; /* Para evitar que o layout pule */
+}
+
+.feedback.success {
+    color: green;
+}
+
+.feedback.error {
+    color: red;
+}
+
+/* Responsividade básica */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+    #respostaEnigma {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+/* Estilos dos Balões */
+.balloon {
+    width: 70px;
+    height: 90px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Forma de balão */
+    position: fixed; /* Flutua em relação à janela */
+    bottom: -100px;  /* Começa abaixo da tela */
+    z-index: 0;      /* Atrás do conteúdo principal */
+    opacity: 0.7;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    /* A duração e o delay serão definidos pelo JavaScript */
+}
+
+/* Efeito do "nó" do balão */
+.balloon::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 0 0 1px 1px;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0);
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-120vh); /* Sobe bem acima da tela */
+        opacity: 0;
+    }
+}
+
+/* Estilos dos Fogos de Artifício */
+.firework-particle {
+    position: fixed;
+    background-color: white; /* Cor base, será alterada por JS */
+    border-radius: 50%;
+    opacity: 1;
+    z-index: 1; /* Acima dos balões, mas abaixo do container */
+    pointer-events: none; /* Para não interferir com cliques */
+}
+
+/* Animação da partícula subindo (o "foguete") */
+@keyframes rise {
+    to {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+}
+
+/* Animação da explosão da partícula */
+@keyframes explode {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(3); /* Aumenta o tamanho da partícula ao explodir/sumir */
+        opacity: 0;
+    }
+}
+
+/* Estilo para o "rastro" do foguete - opcional, mais simples sem */
+/*
+.firework-rocket {
+    position: fixed;
+    width: 3px;
+    height: 30px; 
+    background: linear-gradient(to top, rgba(255,223,186,0.8), rgba(255,223,186,0)); 
+    border-radius: 3px 3px 0 0;
+    z-index: 1;
+    pointer-events: none;
+    animation-timing-function: ease-out;
+}
+
+@keyframes rocketRise {
+    0% {
+        bottom: 0;
+        opacity: 1;
+    }
+    100% {
+        bottom: 70vh; 
+        opacity: 0;
+    }
+}
+*/
+
+.whatsapp-button {
+    display: inline-flex; /* Para alinhar o ícone e o texto */
+    align-items: center; /* Alinha verticalmente o ícone e o texto */
+    justify-content: center; /* Centraliza o conteúdo se o botão tiver largura fixa */
+    background-color: #25D366; /* Cor oficial do WhatsApp */
+    color: white !important; /* Garante que o texto seja branco */
+    padding: 10px 20px;
+    margin-top: 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.whatsapp-button:hover {
+    background-color: #1DAE54; /* Um tom mais escuro do verde do WhatsApp */
+    color: white !important;
+}
