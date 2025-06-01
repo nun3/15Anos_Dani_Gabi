@@ -1,164 +1,89 @@
-// Espera o conteúdo do HTML ser completamente carregado antes de executar o script
 document.addEventListener('DOMContentLoaded', function() {
-    // --- PONTOS DE CUSTOMIZAÇÃO ---
-    const RESPOSTA_CORRETA = "mapa"; // Mude para a resposta da sua charada/brincadeira.
-    const MENSAGEM_SUCESSO = "Correto! 🎉 Você é demais!";
-    const MENSAGEM_ERRO_DICA = "Ops, não foi dessa vez! Tente novamente. Dica: é algo que você usa para se localizar em viagens.";
-    // --- FIM DOS PONTOS DE CUSTOMIZAÇÃO ---
-
+    // --- Lógica do Enigma ---
     const botaoVerificar = document.getElementById('botaoVerificar');
-    const inputResposta = document.getElementById('respostaEnigma');
+    const respostaEnigmaInput = document.getElementById('respostaEnigma');
+    const feedbackEnigma = document.getElementById('feedback');
     const detalhesFesta = document.getElementById('detalhesFesta');
-    const feedbackElement = document.getElementById('feedback');
     const videoAniversario = document.getElementById('videoAniversario');
 
-    function verificarResposta() {
-        const respostaUsuario = inputResposta.value.trim().toLowerCase(); 
+    // Respostas corretas para o enigma (em minúsculas para facilitar a comparação)
+    const respostasCorretasEnigma = ["mapa", "um mapa", "o mapa"];
 
-        // Limpa classes de feedback anteriores
-        feedbackElement.classList.remove('success', 'error');
+    if (botaoVerificar) {
+        botaoVerificar.addEventListener('click', function() {
+            const respostaUsuario = respostaEnigmaInput.value.trim().toLowerCase();
 
-        if (respostaUsuario === RESPOSTA_CORRETA) {
-            detalhesFesta.classList.remove('hidden');
-            feedbackElement.textContent = MENSAGEM_SUCESSO;
-            feedbackElement.classList.add('success');
-            if (videoAniversario) {
-                // Tenta reproduzir o vídeo
-                videoAniversario.play().catch(error => {
-                    // O autoplay pode ser bloqueado pelo navegador mesmo com 'muted'
-                    // O usuário ainda pode clicar no play manualmente através dos controles
-                    console.warn("Autoplay do vídeo foi impedido pelo navegador:", error);
-                });
-            }
-        } else {
-            detalhesFesta.classList.add('hidden'); // Garante que os detalhes fiquem escondidos se errar
-            feedbackElement.textContent = MENSAGEM_ERRO_DICA;
-            feedbackElement.classList.add('error');
-            inputResposta.focus(); // Coloca o foco de volta no campo de resposta
-            inputResposta.select(); // Seleciona o texto para facilitar a correção
-        }
-    }
+            if (respostasCorretasEnigma.includes(respostaUsuario)) {
+                feedbackEnigma.textContent = 'Correto! Revelando os detalhes...';
+                feedbackEnigma.className = 'feedback success'; // Use classes para estilização
+                detalhesFesta.classList.remove('hidden');
+                detalhesFesta.style.display = 'block'; // Garante visibilidade se .hidden usa display:none
 
-    // Adiciona event listeners apenas se os elementos existirem
-    if (botaoVerificar && inputResposta && detalhesFesta && feedbackElement && videoAniversario) {
-        botaoVerificar.addEventListener('click', verificarResposta);
-
-        inputResposta.addEventListener('keypress', function(event) {
-            // Verifica se a tecla pressionada foi "Enter" (código 13)
-            if (event.key === 'Enter' || event.keyCode === 13) {
-                verificarResposta();
+                if (videoAniversario) {
+                    // O vídeo já tem 'autoplay' e 'muted'.
+                    // Se precisar forçar o play após revelação (e já estiver mudo):
+                    videoAniversario.play().catch(error => {
+                        console.log("Vídeo autoplay pode ter sido bloqueado pelo navegador:", error);
+                        // Navegadores podem bloquear autoplay com som. 'muted' ajuda.
+                    });
+                }
+            } else {
+                feedbackEnigma.textContent = 'Resposta incorreta. Tente novamente!';
+                feedbackEnigma.className = 'feedback error'; // Use classes para estilização
+                // Opcional: esconder detalhes se já estiverem visíveis e errar novamente
+                // detalhesFesta.classList.add('hidden');
+                // detalhesFesta.style.display = 'none';
             }
         });
-    } else {
-        console.error("Um ou mais elementos essenciais do convite não foram encontrados no DOM.");
     }
 
-    // --- EFEITO DE BALÕES FLUTUANTES ---
-    function createBalloonEffect() {
-        const balloonColors = [
-            'rgba(255, 105, 180, 0.7)', // Rosa
-            'rgba(135, 206, 250, 0.7)', // Azul claro
-            'rgba(255, 215, 0, 0.7)',   // Dourado
-            'rgba(144, 238, 144, 0.7)', // Verde claro
-            'rgba(255, 160, 122, 0.7)'  // Salmão claro
-        ];
+    // --- Integração com EmailJS ---
+    const formMensagens = document.getElementById('formMensagens');
+    const formFeedback = document.getElementById('formFeedback'); // Div para feedback do formulário
 
-        function createSingleBalloon() {
-            const balloon = document.createElement('div');
-            balloon.classList.add('balloon');
+    if (formMensagens) {
+        // IMPORTANTE: Substitua 'YOUR_PUBLIC_KEY' pelo seu Public Key do EmailJS
+        // Você encontra em Account > API Keys no painel do EmailJS
+        emailjs.init({ publicKey: 'kP9lxh5VvGzdz5HSe' });
 
-            // Posição horizontal aleatória
-            balloon.style.left = Math.random() * 95 + 'vw'; // vw = viewport width
+        formMensagens.addEventListener('submit', function(event) {
+            event.preventDefault(); // Previne o envio padrão do formulário
 
-            // Duração da animação aleatória (velocidade)
-            const animationDuration = Math.random() * 8 + 7; // Entre 7 e 15 segundos
-            balloon.style.animationDuration = animationDuration + 's';
+            formFeedback.textContent = 'Enviando...';
+            formFeedback.className = 'feedback info'; // Use classes para estilização
 
-            // Delay aleatório para não começarem todos juntos
-            // balloon.style.animationDelay = Math.random() * 2 + 's'; // Opcional: se quiser um delay inicial
+            // IMPORTANTE: Substitua pelos seus IDs do EmailJS
+            const serviceID = 'service_iyhdiar'; // Do EmailJS > Email Services
+            const templateID = 'template_vnt58lc'; // Do EmailJS > Email Templates
 
-            // Cor aleatória
-            balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-
-            document.body.appendChild(balloon);
-
-            // Remove o balão do DOM após a animação terminar para não sobrecarregar
-            balloon.addEventListener('animationend', function() {
-                balloon.remove();
-            });
-        }
-
-        setInterval(createSingleBalloon, 1500); // Cria um novo balão a cada 1.5 segundos
-    }
-    createBalloonEffect(); // Inicia o efeito dos balões
-
-    // --- EFEITO DE FOGOS DE ARTIFÍCIO ---
-    function createFireworksEffect() {
-        const fireworkColors = [
-            '#FFD700', // Gold
-            '#FF4500', // OrangeRed
-            '#FF69B4', // HotPink (usado no tema)
-            '#00FFFF', // Aqua
-            '#7FFF00', // Chartreuse
-            '#FFFFFF'  // White
-        ];
-
-        function launchFirework() {
-            const startX = Math.random() * window.innerWidth;
-            const endY = Math.random() * (window.innerHeight / 2); // Explode na metade superior da tela
-            const duration = Math.random() * 2 + 1; // Duração da subida: 1 a 3 segundos
-
-            const rocket = document.createElement('div');
-            rocket.classList.add('firework-particle'); // Reutiliza a classe para a subida
-            rocket.style.left = startX + 'px';
-            rocket.style.bottom = '0px';
-            rocket.style.width = '3px';
-            rocket.style.height = '10px';
-            rocket.style.backgroundColor = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
-            
-            document.body.appendChild(rocket);
-
-            // Animação de subida simples com JS (poderia ser CSS @keyframes rise também)
-            rocket.animate([
-                { bottom: '0px', opacity: 1 },
-                { bottom: `${window.innerHeight - endY}px`, opacity: 0.5 }
-            ], {
-                duration: duration * 1000,
-                easing: 'ease-out'
-            }).onfinish = () => {
-                rocket.remove();
-                explode(startX, window.innerHeight - endY); // Posição X da subida, Posição Y da explosão
+            // Coleta os dados do formulário
+            // Os nomes dos campos (ex: nomeConvidado) devem corresponder às variáveis no seu template EmailJS (ex: {{nomeConvidado}})
+            const templateParams = {
+                nomeConvidado: document.getElementById('nomeConvidado').value,
+                emailConvidado: document.getElementById('emailConvidado').value,
+                confirmacaoPresenca: document.getElementById('confirmacaoPresenca').value,
+                mensagemConvidado: document.getElementById('mensagemConvidado').value,
+                // Adicione aqui outros parâmetros se o seu template EmailJS os esperar
+                // por exemplo: to_name: "Dani e Gabi" (se seu template tiver {{to_name}})
             };
-        }
 
-        function explode(x, y) {
-            const particleCount = 50 + Math.floor(Math.random() * 50); // Entre 50 e 100 partículas
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('firework-particle');
-                particle.style.left = x + 'px';
-                particle.style.top = y + 'px';
-                particle.style.width = (Math.random() * 3 + 2) + 'px'; // Tamanho 2px a 5px
-                particle.style.height = particle.style.width;
-                particle.style.backgroundColor = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
-
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 100 + 50; // Distância da explosão
-                const particleDuration = Math.random() * 1000 + 800; // Duração da partícula: 0.8s a 1.8s
-
-                document.body.appendChild(particle);
-
-                particle.animate([
-                    { transform: `translate(0, 0) scale(1)`, opacity: 1 },
-                    { transform: `translate(${Math.cos(angle) * speed}px, ${Math.sin(angle) * speed}px) scale(0)`, opacity: 0 }
-                ], {
-                    duration: particleDuration,
-                    easing: 'ease-out'
-                }).onfinish = () => particle.remove();
-            }
-        }
-        setInterval(launchFirework, 2500); // Lança um novo fogo de artifício a cada 2.5 segundos
+            emailjs.send(serviceID, templateID, templateParams)
+                .then(function(response) {
+                   console.log('SUCESSO!', response.status, response.text);
+                   formFeedback.textContent = 'Mensagem enviada com sucesso! Obrigado por confirmar.';
+                   formFeedback.className = 'feedback success';
+                   formMensagens.reset(); // Limpa o formulário
+                }, function(error) {
+                   console.log('FALHA...', error);
+                   formFeedback.textContent = 'Falha ao enviar a mensagem. Por favor, tente novamente ou confirme via WhatsApp.';
+                   formFeedback.className = 'feedback error';
+                });
+        });
     }
-    createFireworksEffect(); // Inicia o efeito dos fogos
 });
+
+// Sugestão para seu style.css (adicione ou ajuste conforme seu design)
+// .feedback.success { color: green; }
+// .feedback.error { color: red; }
+// .feedback.info { color: blue; }
+// .hidden { display: none !important; } /* Garante que a classe hidden funcione */

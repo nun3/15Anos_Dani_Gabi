@@ -1,12 +1,17 @@
 :root {
-    --cor-primaria: #ff69b4; /* Rosa choque */
-    --cor-primaria-escura: #ff1493; /* Rosa choque mais escuro */
+    --cor-primaria: #f875aa; /* Rosa vibrante e moderno */
+    --cor-primaria-escura: #e0578f; /* Tom mais escuro do rosa primário */
+    --cor-secundaria: #75c9c8; /* Verde água / Teal suave */
+    --cor-texto-principal: #5c5c5c; /* Cinza escuro para boa legibilidade */
+    --cor-fundo-elemento-claro: #fff5f8; /* Rosa bem clarinho, quase branco */
+    --cor-destaque-suave: #bea0dc; /* Lavanda suave para detalhes */
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    background-color: #f0f8ff; /* Azul céu bem clarinho */
-    color: #333;
+    /* Gradiente suave de rosa claro para lavanda claro */
+    background: linear-gradient(135deg, #fff0f5 0%, #f5f0ff 100%);
+    color: var(--cor-texto-principal);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,10 +22,10 @@ body {
 }
 
 .container {
-    background-color: #fff;
+    background-color: #ffffff; /* Branco puro para o card principal, para bom contraste */
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 12px; /* Bordas um pouco mais arredondadas */
+    box-shadow: 0 8px 25px rgba(248, 117, 170, 0.15); /* Sombra suave com tom rosado */
     text-align: center;
     max-width: 600px;
     width: 100%;
@@ -28,28 +33,46 @@ body {
     z-index: 10;      /* Para ficar na frente dos balões */
 }
 
+/* Estilo para a imagem principal do convite */
+.convite-imagem-principal {
+    width: 100%;
+    max-width: 450px; /* Ajuste conforme o tamanho ideal da sua imagem */
+    height: auto;
+    border-radius: 10px;
+    margin: 0 auto 25px auto; /* Centraliza e adiciona margem inferior */
+    box-shadow: 0 6px 20px rgba(248, 117, 170, 0.12);
+}
+
 h1 {
     color: var(--cor-primaria);
     font-size: 2em;
+    text-shadow: 1px 1px 2px rgba(248, 117, 170, 0.1); /* Sombra de texto sutil */
 }
 
 h2 {
-    color: #32cd32; /* Verde limão */
+    color: var(--cor-secundaria); /* Usando a cor secundária (teal) */
 }
 
 .enigma p#perguntaEnigma {
     font-size: 1.1em;
     margin-bottom: 15px;
-    color: #555;
+    color: var(--cor-texto-principal);
 }
 
 #respostaEnigma {
     padding: 10px;
     margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #fbcfe8; /* Borda rosa claro */
+    border-radius: 8px; /* Bordas mais arredondadas */
     width: calc(70% - 22px); /* Ajuste para caber ao lado do botão */
     box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#respostaEnigma:focus {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(248, 117, 170, 0.25);
+    outline: none;
 }
 
 button {
@@ -57,10 +80,11 @@ button {
     background-color: var(--cor-primaria);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* Bordas mais arredondadas */
     cursor: pointer;
     font-size: 1em;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 button:hover {
@@ -68,20 +92,41 @@ button:hover {
 }
 
 button:focus {
-    outline: 2px solid var(--cor-primaria-escura);
+    outline: 3px solid rgba(248, 117, 170, 0.3);
     outline-offset: 2px;
-    background-color: var(--cor-primaria-escura); /* Opcional: manter consistência com hover */
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .hidden {
     display: none;
 }
 
+/* Estilo base para seções de conteúdo que podem ter transições */
+.secao-conteudo {
+    opacity: 1;
+    max-height: 2000px; /* Um valor alto o suficiente para o conteúdo */
+    overflow: hidden;
+    transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out, margin-top 0.5s ease-in-out, padding-top 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateY(0);
+}
+
+.secao-conteudo.hidden {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    transform: translateY(-20px); /* Efeito sutil de deslizar para cima ao esconder */
+}
+
 #detalhesFesta {
     margin-top: 30px;
-    border-top: 2px dashed #ffc0cb; /* Rosa claro */
+    border-top: 2px dashed var(--cor-primaria); /* Linha tracejada com a cor primária */
     padding-top: 20px;
-}
+} /* Adicionar a classe .secao-conteudo a este elemento no HTML se desejar transição */
 
 .video-container {
     margin-bottom: 20px;
@@ -102,7 +147,7 @@ button:focus {
 }
 
 .endereco {
-    background-color: #e6e6fa; /* Lavanda claro */
+    background-color: var(--cor-fundo-elemento-claro); /* Fundo rosa bem clarinho */
     padding: 15px;
     border-radius: 8px;
     margin-top: 20px;
@@ -110,8 +155,24 @@ button:focus {
 }
 
 .endereco h3 {
-    color: #483d8b; /* Azul ardósia escuro */
+    color: var(--cor-primaria-escura); /* Tom mais escuro da cor primária */
     margin-top: 0;
+}
+
+/* Estilos para blocos de informação do evento (Data, Hora, Local) */
+.info-evento {
+    background-color: var(--cor-fundo-elemento-claro);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: left;
+    border-left: 5px solid var(--cor-destaque-suave);
+}
+.info-evento h3 {
+    color: var(--cor-primaria-escura);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
 }
 
 .feedback {
@@ -128,8 +189,75 @@ button:focus {
     color: red;
 }
 
+/* Estilos para o Formulário de Mensagens/RSVP */
+.formulario-mensagens {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px dashed var(--cor-secundaria);
+    text-align: left; /* Alinhar labels e inputs à esquerda */
+}
+
+.formulario-mensagens h3 {
+    color: var(--cor-primaria);
+    margin-bottom: 20px;
+    text-align: center; /* Centralizar o título do formulário */
+    font-size: 1.4em;
+}
+
+.formulario-mensagens .form-group {
+    margin-bottom: 15px;
+}
+
+.formulario-mensagens label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--cor-texto-principal);
+    font-size: 0.95em;
+}
+
+.formulario-mensagens input[type="text"],
+.formulario-mensagens input[type="email"],
+.formulario-mensagens textarea,
+.formulario-mensagens select { /* Adicionado select aqui */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #fbcfe8; /* Borda rosa claro, como em #respostaEnigma */
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff; /* Garante fundo branco, especialmente para select */
+}
+
+.formulario-mensagens input[type="text"]:focus,
+.formulario-mensagens input[type="email"]:focus,
+.formulario-mensagens textarea:focus,
+.formulario-mensagens select:focus { /* Adicionado select aqui */
+    border-color: var(--cor-primaria); /* Reutiliza o estilo de foco de #respostaEnigma */
+    box-shadow: 0 0 0 3px rgba(248, 117, 170, 0.25);
+    outline: none;
+}
+
+.formulario-mensagens textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.formulario-mensagens button {
+    /* Os estilos globais de 'button' já se aplicam bem.
+       Podemos ajustar se necessário, por exemplo, para largura: */
+    width: auto; /* Para não ocupar 100% por padrão, a menos que em mobile */
+    display: inline-block;
+    padding: 12px 25px; /* Um pouco mais de padding para o botão de envio */
+}
+
 /* Responsividade básica */
 @media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
     h1 {
         font-size: 1.5em;
     }
@@ -141,6 +269,11 @@ button:focus {
 
     button {
         width: 100%;
+        padding: 12px 15px; /* Ajuste de padding para botões full-width */
+    }
+
+    .formulario-mensagens button {
+        width: 100%; /* Botão do formulário também ocupa largura total em mobile */
     }
 }
 
@@ -151,7 +284,7 @@ button:focus {
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Forma de balão */
     position: fixed; /* Flutua em relação à janela */
     bottom: -100px;  /* Começa abaixo da tela */
-    z-index: 0;      /* Atrás do conteúdo principal */
+    z-index: 0;      /* Atrás do conteúdo principal .container */
     opacity: 0.7;
     animation-name: floatUp;
     animation-timing-function: linear;
@@ -190,7 +323,7 @@ button:focus {
     position: fixed;
     background-color: white; /* Cor base, será alterada por JS */
     border-radius: 50%;
-    opacity: 1;
+    opacity: 0.9; /* Levemente translúcido para um efeito mais suave */
     z-index: 1; /* Acima dos balões, mas abaixo do container */
     pointer-events: none; /* Para não interferir com cliques */
 }
@@ -215,31 +348,6 @@ button:focus {
     }
 }
 
-/* Estilo para o "rastro" do foguete - opcional, mais simples sem */
-/*
-.firework-rocket {
-    position: fixed;
-    width: 3px;
-    height: 30px; 
-    background: linear-gradient(to top, rgba(255,223,186,0.8), rgba(255,223,186,0)); 
-    border-radius: 3px 3px 0 0;
-    z-index: 1;
-    pointer-events: none;
-    animation-timing-function: ease-out;
-}
-
-@keyframes rocketRise {
-    0% {
-        bottom: 0;
-        opacity: 1;
-    }
-    100% {
-        bottom: 70vh; 
-        opacity: 0;
-    }
-}
-*/
-
 .whatsapp-button {
     display: inline-flex; /* Para alinhar o ícone e o texto */
     align-items: center; /* Alinha verticalmente o ícone e o texto */
@@ -257,7 +365,16 @@ button:focus {
     cursor: pointer;
 }
 
+.whatsapp-button img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle; /* Mantém alinhamento com o texto */
+    margin-right: 8px; /* Espaçamento entre ícone e texto */
+}
+
 .whatsapp-button:hover {
     background-color: #1DAE54; /* Um tom mais escuro do verde do WhatsApp */
     color: white !important;
 }
+
+/* Certifique-se de que há uma nova linha no final do arquivo para boas práticas */
