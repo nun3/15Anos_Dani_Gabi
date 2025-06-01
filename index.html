@@ -23,35 +23,48 @@
             <h2>Parabéns! Aqui estão os detalhes da festa:</h2>
             <p>Aqui estão os detalhes da nossa celebração:</p>
 
-            <div class="video-container">
-                <!-- IMPORTANTE: Substitua o link abaixo pelo link do SEU vídeo! -->
-                <!-- Exemplo do YouTube: -->
-                <!--<iframe width="560" height="315" src="D:\AniversarioGabiDani15\video\202406-08-0.mp4 title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
--->
-                <!-- Vídeo local: começa mudo e com autoplay. O som será ativado via JS. -->
-                <!-- Certifique-se que o arquivo video.mp4 está no mesmo diretório que index.html ou ajuste o caminho -->
-                <video id="videoAniversario" width="560" height="315" controls autoplay muted>
-                    <source src="video.mp4" type="video/mp4"> <!-- Caminho corrigido -->
-                    Seu navegador não suporta o elemento de vídeo.
-                </video>
-            </div>
+            <!-- Seção do Presente/Vídeo -->
+            <div class="presente-video-wrapper">
+                <!-- Área do Presente Clicável -->
+                <div id="areaPresente">
+                    <p>Oi Pessoal! Preparamos uma mensagem em vídeo super especial para você! Clique no presente para assistir.</p>
+                    <!--
+                        IMPORTANTE: Substitua 'gift-image.png' pelo caminho real da sua imagem de presente.
+                        Você pode usar uma imagem local (ex: ./images/presente.png) ou um link de uma imagem online.
+                        Sugestão: procure por "ícone de presente PNG" ou "gift icon png" em sites de imagens.
+                    -->
+                    <img src="./presente.png" alt="Clique para ver o vídeo surpresa" id="imagemDoPresente">
+                </div>
 
+                <!-- Contêiner do Vídeo (originalmente .video-container), inicialmente oculto -->
+                <div id="videoWrapper" class="video-container" style="display: none;">
+                    <!-- O vídeo original é mantido aqui -->
+                    <video id="videoAniversario" width="560" height="315" controls>
+                        <source src="video.mp4" type="video/mp4"> <!-- Caminho corrigido -->
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                </div>
+            </div>
             <!-- Informações do Evento -->
             <div class="info-evento">
                 <h3>Data e Hora</h3>
-                <p><strong>Data:</strong> Sábado, [Data do Evento Aqui]</p>
-                <p><strong>Horário:</strong> A partir das [Horário do Evento Aqui]</p>
+                <p><strong>Data:</strong> Sábado, 19 de Julho</p>
+                <p><strong>Horário:</strong> A partir das 19:00</p>
             </div>
 
             <div class="info-evento">
                 <h3>Local da Festa</h3>
-                <p>[Nome do Local da Festa Aqui]</p>
-                <p>[Endereço Completo do Local Aqui]</p>
-                <p><a href="https://maps.app.goo.gl/31BGUohEC7a8vyeS7" target="_blank" title="Ver como chegar">Ver no mapa</a></p>
+                <p>Espaço Pimenta</p>
+                <p>Av Rua, 900 - Industrial, Pato Branco - PR</p>
+                <p>
+                    <a href="https://maps.app.goo.gl/31BGUohEC7a8vyeS7" target="_blank" title="Ver como chegar" class="map-link">
+                        <img src="https://api.iconify.design/material-symbols/map-outline.svg?color=%23FF69B4" alt="Ícone Mapa" class="map-icon"> Ver no mapa
+                    </a>
+                </p>
             </div>
 
             <div class="info-evento">
-                <h3>Prefere confirmar por WhatsApp?</h3>
+                <h3>Confirme pelo WhatsApp!</h3>
                 <p>Clique no botão abaixo para enviar uma mensagem rápida de confirmação.</p>
                 <a href="https://wa.me/41991526177" target="_blank" class="whatsapp-button">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/150px-WhatsApp.svg.png" alt="WhatsApp Icon">

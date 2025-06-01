@@ -2,13 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Elementos do DOM ---
     const detalhesFesta = document.getElementById('detalhesFesta');
     const videoAniversario = document.getElementById('videoAniversario');
+    // Elementos para a interação do presente/vídeo
+    const imagemDoPresente = document.getElementById('imagemDoPresente');
+    const areaPresente = document.getElementById('areaPresente');
+    const videoWrapper = document.getElementById('videoWrapper'); // Este é o .video-container que agora tem um ID
+
     const balloonGameSection = document.getElementById('balloonGameSection');
     const balloonsToPopTargetTextEl = document.getElementById('balloonsToPopTargetText');
     const balloonsPoppedCountTextEl = document.getElementById('balloonsPoppedCountText');
     const balloonsTargetCountTextEl = document.getElementById('balloonsTargetCountText');
     const balloonGameFeedbackEl = document.getElementById('balloonGameFeedback');
 
-    // --- Configurações do Jogo de Balões ---
+    // --- Configurações do Jogo de Balões (se aplicável) ---
     const TOTAL_BALLOONS_TO_POP = 10; // Quantos balões o usuário precisa estourar
     const MAX_ACTIVE_BALLOONS = 6;   // Máximo de balões na tela ao mesmo tempo
     const BALLOON_SPAWN_INTERVAL = 1200; // Intervalo para tentar criar um novo balão (em ms)
@@ -18,12 +23,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let mainObjectiveAchieved = false; // Nova flag para controlar a revelação principal
     let balloonSpawnTimer;
 
-    function initBalloonGame() {
-        balloonsToPopTargetTextEl.textContent = TOTAL_BALLOONS_TO_POP;
-        balloonsTargetCountTextEl.textContent = TOTAL_BALLOONS_TO_POP;
-        updatePoppedCountDisplay();
-        mainObjectiveAchieved = false; // Reseta a flag ao iniciar/reiniciar
-        balloonSpawnTimer = setInterval(spawnBalloon, BALLOON_SPAWN_INTERVAL);
+    // --- Inicialização do Jogo de Balões ---
+    if (balloonGameSection && balloonsToPopTargetTextEl && balloonsTargetCountTextEl && balloonsPoppedCountTextEl) {
+        function initBalloonGame() {
+            balloonsToPopTargetTextEl.textContent = TOTAL_BALLOONS_TO_POP;
+            balloonsTargetCountTextEl.textContent = TOTAL_BALLOONS_TO_POP;
+            updatePoppedCountDisplay();
+            mainObjectiveAchieved = false; // Reseta a flag ao iniciar/reiniciar
+            balloonSpawnTimer = setInterval(spawnBalloon, BALLOON_SPAWN_INTERVAL);
+        }
     }
 
     function spawnBalloon() {
@@ -59,19 +67,23 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePoppedCountDisplay();
 
         if (balloonsPopped >= TOTAL_BALLOONS_TO_POP && !mainObjectiveAchieved) {
-            revealPartyDetails();
+            revealMainContent(); // Nome mais genérico, já que pode não ser só detalhes da festa
         }
     }
 
     function updatePoppedCountDisplay() {
-        balloonsPoppedCountTextEl.textContent = balloonsPopped;
+        if (balloonsPoppedCountTextEl) {
+            balloonsPoppedCountTextEl.textContent = balloonsPopped;
+        }
     }
 
-    function revealPartyDetails() { // Função renomeada e modificada
+    function revealMainContent() { // Função para revelar o conteúdo principal após o jogo
         mainObjectiveAchieved = true; // Marca que o objetivo principal foi alcançado
 
-        balloonGameFeedbackEl.textContent = 'Parabéns! Você conseguiu!';
-        balloonGameFeedbackEl.className = 'feedback success';
+        if (balloonGameFeedbackEl) {
+            balloonGameFeedbackEl.textContent = 'Parabéns! Você conseguiu!';
+            balloonGameFeedbackEl.className = 'feedback success';
+        }
 
         // Esconde a seção do jogo e mostra os detalhes da festa
         if(balloonGameSection) balloonGameSection.classList.add('hidden'); // Ou style.display = 'none'
@@ -79,17 +91,45 @@ document.addEventListener('DOMContentLoaded', function() {
         detalhesFesta.classList.remove('hidden');
         detalhesFesta.style.display = 'block'; // Garante visibilidade
 
-        if (videoAniversario) {
-            videoAniversario.play().catch(error => {
-                console.log("Autoplay do vídeo pode ter sido bloqueado:", error);
-            });
-        }
-
         // Os balões continuarão a ser gerados e poderão ser estourados
         // O balloonSpawnTimer NÃO é limpo aqui
+        // O vídeo NÃO é iniciado aqui, pois agora ele depende do clique no presente.
     }
 
-    // Inicia o jogo
+    // --- Lógica para o Presente/Vídeo ---
+    if (imagemDoPresente && areaPresente && videoWrapper && videoAniversario) {
+        imagemDoPresente.addEventListener('click', () => {
+            // Esconde a área do presente (imagem e texto de incentivo)
+            areaPresente.style.display = 'none';
+            
+            // Mostra o contêiner do vídeo
+            videoWrapper.style.display = 'block';
+            
+            // Tira o mudo do vídeo
+            videoAniversario.muted = false;
+            
+            // Tenta reproduzir o vídeo.
+            // Como o atributo 'autoplay' foi removido da tag <video> no HTML,
+            // o vídeo só começará a tocar agora, após este clique.
+            // A linha 'videoAniversario.muted = false;' acima garante que ele toque com som.
+            videoAniversario.play().catch(error => {
+                console.error("Erro ao tentar reproduzir o vídeo após clique no presente:", error);
+                // Navegadores podem ter políticas estritas sobre autoplay com som.
+                // Como isso ocorre após uma interação do usuário (clique), geralmente é permitido.
+                // Se houver problemas, os controles do vídeo (<video controls>)
+                // permitirão que o usuário dê play manualmente.
+            });
+        });
+    } else {
+        // Log para ajudar a identificar se algum elemento do presente/vídeo não foi encontrado
+        console.warn('Não foi possível inicializar a funcionalidade do presente/vídeo. Elementos ausentes:');
+        if (!imagemDoPresente) console.warn('- imagemDoPresente não encontrada');
+        if (!areaPresente) console.warn('- areaPresente não encontrado');
+        if (!videoWrapper) console.warn('- videoWrapper não encontrado');
+        if (!videoAniversario) console.warn('- videoAniversario não encontrado');
+    }
+
+    // --- Inicia o jogo de balões (se a seção existir) ---
     if (balloonGameSection) { // Garante que a seção do jogo exista antes de iniciar
         initBalloonGame();
     }

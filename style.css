@@ -314,4 +314,63 @@ button:active {
     color: white !important;
 }
 
+/* Estilos para o link do mapa com ícone */
+.map-link {
+    display: inline-flex; /* Alinha o ícone e o texto na mesma linha */
+    align-items: center;  /* Centraliza verticalmente o ícone e o texto */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    color: var(--cor-primaria); /* Usa a cor primária para o link */
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.map-link:hover {
+    color: var(--cor-primaria-escura); /* Escurece um pouco no hover */
+    text-decoration: underline; /* Adiciona sublinhado no hover para feedback */
+}
+
+.map-icon {
+    width: 20px;  /* Tamanho do ícone */
+    height: 20px; /* Tamanho do ícone */
+    margin-right: 6px; /* Espaçamento entre o ícone e o texto */
+}
+
+/* Estilos para a seção do presente/vídeo */
+.presente-video-wrapper {
+    text-align: center;
+    margin-top: 30px; /* Adiciona um espaço acima da seção do presente */
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: var(--cor-fundo-elemento-claro); /* Fundo suave para destacar a seção */
+    border-radius: 8px;
+    border-top: 3px solid var(--cor-primaria);
+    border-bottom: 3px solid var(--cor-primaria);
+}
+
+#areaPresente p {
+    font-family: var(--font-principal);
+    font-size: 1.15em; /* Tamanho um pouco maior para legibilidade e destaque */
+    color: var(--cor-secundaria); /* Usando a cor secundária para o texto */
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-weight: 500; /* Um pouco mais de peso na fonte */
+}
+
+#imagemDoPresente {
+    cursor: pointer;
+    max-width: 180px; /* Levemente menor para um visual mais delicado */
+    display: block;
+    margin: 0 auto 15px auto; /* Centraliza e adiciona margem inferior */
+    border: 3px solid var(--cor-primaria); /* Borda com a cor primária */
+    border-radius: 12px; /* Bordas um pouco mais arredondadas */
+    padding: 8px; /* Padding interno */
+    background-color: #fff; /* Fundo branco para a imagem se destacar */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#imagemDoPresente:hover {
+    transform: scale(1.07); /* Efeito de zoom sutil no hover */
+    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.3); /* Sombra mais pronunciada com a cor primária */
+}
 /* Certifique-se de que há uma nova linha no final do arquivo para boas práticas */
