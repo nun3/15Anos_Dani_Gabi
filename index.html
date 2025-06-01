@@ -12,17 +12,15 @@
         <!-- Substitua 'caminho/para/sua/imagem-central.jpg' pelo caminho real da sua imagem -->
         <img src="./fotoperfil1.jpeg" alt="Convite Dani e Gabi 15 Anos" class="convite-imagem-principal">
 
-        <p>Mas antes de descobrir os detalhes, resolva este enigma:</p>
-
-        <div class="enigma">
-            <p id="perguntaEnigma">O que é, o que é? Tem cidades, mas não casas; tem montanhas, mas não árvores; e tem água, mas não peixes?</p>
-            <input type="text" id="respostaEnigma" placeholder="Sua resposta">
-            <button id="botaoVerificar">Revelar Detalhes!</button>
-            <p id="feedback" class="feedback"></p>
+        <div id="balloonGameSection">
+            <h2>Hora da Diversão!</h2>
+            <p>Para ver os detalhes da festa, estoure <strong id="balloonsToPopTargetText"></strong> balões que aparecerão na tela!</p>
+            <p>Progresso: <span id="balloonsPoppedCountText">0</span> de <span id="balloonsTargetCountText"></span> balões.</p>
+            <p id="balloonGameFeedback" class="feedback"></p> <!-- Para mensagens do jogo -->
         </div>
-
+        
         <div id="detalhesFesta" class="hidden secao-conteudo"> <!-- Adicionada classe .secao-conteudo -->
-            <h2>Parabéns, você desvendou o enigma!</h2>
+            <h2>Parabéns! Aqui estão os detalhes da festa:</h2>
             <p>Aqui estão os detalhes da nossa celebração:</p>
 
             <div class="video-container">
@@ -49,45 +47,13 @@
                 <h3>Local da Festa</h3>
                 <p>[Nome do Local da Festa Aqui]</p>
                 <p>[Endereço Completo do Local Aqui]</p>
-                <p><a href="[LINK_DO_GOOGLE_MAPS_AQUI]" target="_blank" title="Ver como chegar">Ver no mapa</a></p>
+                <p><a href="https://maps.app.goo.gl/31BGUohEC7a8vyeS7" target="_blank" title="Ver como chegar">Ver no mapa</a></p>
             </div>
-
-            <!-- Formulário de Mensagens e RSVP -->
-            <form class="formulario-mensagens" id="formMensagens">
-                <h3>Deixe sua mensagem e confirme sua presença!</h3>
-
-                <div class="form-group">
-                    <label for="nomeConvidado">Seu Nome Completo:</label>
-                    <input type="text" id="nomeConvidado" name="nomeConvidado" required placeholder="Digite seu nome">
-                </div>
-
-                <div class="form-group">
-                    <label for="emailConvidado">Seu E-mail (para contato, opcional):</label>
-                    <input type="email" id="emailConvidado" name="emailConvidado" placeholder="seuemail@exemplo.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="confirmacaoPresenca">Você irá ao evento?</label>
-                    <select id="confirmacaoPresenca" name="confirmacaoPresenca" required>
-                        <option value="" disabled selected>Selecione uma opção...</option>
-                        <option value="sim">Sim, com certeza estarei lá!</option>
-                        <option value="nao">Infelizmente, não poderei comparecer.</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="mensagemConvidado">Sua Mensagem de Felicitações:</label>
-                    <textarea id="mensagemConvidado" name="mensagemConvidado" rows="4" placeholder="Deixe aqui sua mensagem carinhosa..."></textarea>
-                </div>
-
-                <button type="submit">Enviar Confirmação e Mensagem</button>
-                <div class="feedback" id="formFeedback"></div>
-            </form>
 
             <div class="info-evento">
                 <h3>Prefere confirmar por WhatsApp?</h3>
                 <p>Clique no botão abaixo para enviar uma mensagem rápida de confirmação.</p>
-                <a href="https://wa.me/41991526177?text=Olá!%20Confirmo%20minha%20presença%20na%20festa%20de%2015%20anos%20da%20Dani%20e%20Gabi!" target="_blank" class="whatsapp-button">
+                <a href="https://wa.me/41991526177" target="_blank" class="whatsapp-button">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/150px-WhatsApp.svg.png" alt="WhatsApp Icon">
                     Confirmar Presença via WhatsApp
                 </a>
@@ -95,7 +61,6 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="script.js"></script> <!-- Caminho corrigido -->
 </body>
 </html>

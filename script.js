@@ -1,89 +1,96 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Lógica do Enigma ---
-    const botaoVerificar = document.getElementById('botaoVerificar');
-    const respostaEnigmaInput = document.getElementById('respostaEnigma');
-    const feedbackEnigma = document.getElementById('feedback');
+    // --- Elementos do DOM ---
     const detalhesFesta = document.getElementById('detalhesFesta');
     const videoAniversario = document.getElementById('videoAniversario');
+    const balloonGameSection = document.getElementById('balloonGameSection');
+    const balloonsToPopTargetTextEl = document.getElementById('balloonsToPopTargetText');
+    const balloonsPoppedCountTextEl = document.getElementById('balloonsPoppedCountText');
+    const balloonsTargetCountTextEl = document.getElementById('balloonsTargetCountText');
+    const balloonGameFeedbackEl = document.getElementById('balloonGameFeedback');
 
-    // Respostas corretas para o enigma (em minúsculas para facilitar a comparação)
-    const respostasCorretasEnigma = ["mapa", "um mapa", "o mapa"];
+    // --- Configurações do Jogo de Balões ---
+    const TOTAL_BALLOONS_TO_POP = 10; // Quantos balões o usuário precisa estourar
+    const MAX_ACTIVE_BALLOONS = 6;   // Máximo de balões na tela ao mesmo tempo
+    const BALLOON_SPAWN_INTERVAL = 1200; // Intervalo para tentar criar um novo balão (em ms)
+    const BALLOON_COLORS = ['#FF69B4', '#C71585', '#FFB6C1', '#DB7093', '#FF1493', '#FFC0CB']; // Novas cores pink/fúcsia
 
-    if (botaoVerificar) {
-        botaoVerificar.addEventListener('click', function() {
-            const respostaUsuario = respostaEnigmaInput.value.trim().toLowerCase();
+    let balloonsPopped = 0;
+    let mainObjectiveAchieved = false; // Nova flag para controlar a revelação principal
+    let balloonSpawnTimer;
 
-            if (respostasCorretasEnigma.includes(respostaUsuario)) {
-                feedbackEnigma.textContent = 'Correto! Revelando os detalhes...';
-                feedbackEnigma.className = 'feedback success'; // Use classes para estilização
-                detalhesFesta.classList.remove('hidden');
-                detalhesFesta.style.display = 'block'; // Garante visibilidade se .hidden usa display:none
+    function initBalloonGame() {
+        balloonsToPopTargetTextEl.textContent = TOTAL_BALLOONS_TO_POP;
+        balloonsTargetCountTextEl.textContent = TOTAL_BALLOONS_TO_POP;
+        updatePoppedCountDisplay();
+        mainObjectiveAchieved = false; // Reseta a flag ao iniciar/reiniciar
+        balloonSpawnTimer = setInterval(spawnBalloon, BALLOON_SPAWN_INTERVAL);
+    }
 
-                if (videoAniversario) {
-                    // O vídeo já tem 'autoplay' e 'muted'.
-                    // Se precisar forçar o play após revelação (e já estiver mudo):
-                    videoAniversario.play().catch(error => {
-                        console.log("Vídeo autoplay pode ter sido bloqueado pelo navegador:", error);
-                        // Navegadores podem bloquear autoplay com som. 'muted' ajuda.
-                    });
-                }
-            } else {
-                feedbackEnigma.textContent = 'Resposta incorreta. Tente novamente!';
-                feedbackEnigma.className = 'feedback error'; // Use classes para estilização
-                // Opcional: esconder detalhes se já estiverem visíveis e errar novamente
-                // detalhesFesta.classList.add('hidden');
-                // detalhesFesta.style.display = 'none';
+    function spawnBalloon() {
+        const activeBalloons = document.querySelectorAll('.game-balloon').length;
+        if (activeBalloons >= MAX_ACTIVE_BALLOONS) {
+            return; // Não cria mais balões se o limite foi atingido
+        }
+
+        const balloon = document.createElement('div');
+        balloon.classList.add('game-balloon');
+
+        // Estilo e Posição Aleatória
+        balloon.style.backgroundColor = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+        balloon.style.left = Math.random() * (window.innerWidth - 70) + 'px'; // 70 é a largura do balão
+        balloon.style.animationDuration = (Math.random() * 5 + 6) + 's'; // Duração da animação entre 6s e 11s
+
+        balloon.addEventListener('click', handleBalloonPop);
+        balloon.addEventListener('animationend', () => {
+            // Remove o balão se ele flutuar para fora da tela sem ser estourado
+            if (balloon.parentNode) {
+                balloon.remove();
             }
         });
+
+        document.body.appendChild(balloon);
     }
 
-    // --- Integração com EmailJS ---
-    const formMensagens = document.getElementById('formMensagens');
-    const formFeedback = document.getElementById('formFeedback'); // Div para feedback do formulário
+    function handleBalloonPop(event) {
+        const poppedBalloon = event.target;
+        poppedBalloon.remove(); // Remove o balão estourado
 
-    if (formMensagens) {
-        // IMPORTANTE: Substitua 'YOUR_PUBLIC_KEY' pelo seu Public Key do EmailJS
-        // Você encontra em Account > API Keys no painel do EmailJS
-        emailjs.init({ publicKey: 'kP9lxh5VvGzdz5HSe' });
+        balloonsPopped++;
+        updatePoppedCountDisplay();
 
-        formMensagens.addEventListener('submit', function(event) {
-            event.preventDefault(); // Previne o envio padrão do formulário
+        if (balloonsPopped >= TOTAL_BALLOONS_TO_POP && !mainObjectiveAchieved) {
+            revealPartyDetails();
+        }
+    }
 
-            formFeedback.textContent = 'Enviando...';
-            formFeedback.className = 'feedback info'; // Use classes para estilização
+    function updatePoppedCountDisplay() {
+        balloonsPoppedCountTextEl.textContent = balloonsPopped;
+    }
 
-            // IMPORTANTE: Substitua pelos seus IDs do EmailJS
-            const serviceID = 'service_iyhdiar'; // Do EmailJS > Email Services
-            const templateID = 'template_vnt58lc'; // Do EmailJS > Email Templates
+    function revealPartyDetails() { // Função renomeada e modificada
+        mainObjectiveAchieved = true; // Marca que o objetivo principal foi alcançado
 
-            // Coleta os dados do formulário
-            // Os nomes dos campos (ex: nomeConvidado) devem corresponder às variáveis no seu template EmailJS (ex: {{nomeConvidado}})
-            const templateParams = {
-                nomeConvidado: document.getElementById('nomeConvidado').value,
-                emailConvidado: document.getElementById('emailConvidado').value,
-                confirmacaoPresenca: document.getElementById('confirmacaoPresenca').value,
-                mensagemConvidado: document.getElementById('mensagemConvidado').value,
-                // Adicione aqui outros parâmetros se o seu template EmailJS os esperar
-                // por exemplo: to_name: "Dani e Gabi" (se seu template tiver {{to_name}})
-            };
+        balloonGameFeedbackEl.textContent = 'Parabéns! Você conseguiu!';
+        balloonGameFeedbackEl.className = 'feedback success';
 
-            emailjs.send(serviceID, templateID, templateParams)
-                .then(function(response) {
-                   console.log('SUCESSO!', response.status, response.text);
-                   formFeedback.textContent = 'Mensagem enviada com sucesso! Obrigado por confirmar.';
-                   formFeedback.className = 'feedback success';
-                   formMensagens.reset(); // Limpa o formulário
-                }, function(error) {
-                   console.log('FALHA...', error);
-                   formFeedback.textContent = 'Falha ao enviar a mensagem. Por favor, tente novamente ou confirme via WhatsApp.';
-                   formFeedback.className = 'feedback error';
-                });
-        });
+        // Esconde a seção do jogo e mostra os detalhes da festa
+        if(balloonGameSection) balloonGameSection.classList.add('hidden'); // Ou style.display = 'none'
+
+        detalhesFesta.classList.remove('hidden');
+        detalhesFesta.style.display = 'block'; // Garante visibilidade
+
+        if (videoAniversario) {
+            videoAniversario.play().catch(error => {
+                console.log("Autoplay do vídeo pode ter sido bloqueado:", error);
+            });
+        }
+
+        // Os balões continuarão a ser gerados e poderão ser estourados
+        // O balloonSpawnTimer NÃO é limpo aqui
+    }
+
+    // Inicia o jogo
+    if (balloonGameSection) { // Garante que a seção do jogo exista antes de iniciar
+        initBalloonGame();
     }
 });
-
-// Sugestão para seu style.css (adicione ou ajuste conforme seu design)
-// .feedback.success { color: green; }
-// .feedback.error { color: red; }
-// .feedback.info { color: blue; }
-// .hidden { display: none !important; } /* Garante que a classe hidden funcione */
