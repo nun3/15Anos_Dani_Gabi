@@ -102,16 +102,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // Esconde a área do presente (imagem e texto de incentivo)
             areaPresente.style.display = 'none';
             
-            // Mostra o contêiner do vídeo
+            // 1. Torna o contêiner do vídeo 'displayable' para que a transição CSS possa ocorrer
             videoWrapper.style.display = 'block';
+
+            // 2. Força um reflow/repaint antes de adicionar a classe para garantir que a transição ocorra
+            // Adicionar a classe 'visible' em um pequeno timeout ou requestAnimationFrame
+            requestAnimationFrame(() => {
+                videoWrapper.classList.add('visible');
+            });
+            // Alternativa com timeout:
+            // setTimeout(() => {
+            // videoWrapper.classList.add('visible');
+            // }, 20); // Um pequeno atraso é suficiente
             
-            // Tira o mudo do vídeo
             videoAniversario.muted = false;
-            
-            // Tenta reproduzir o vídeo.
-            // Como o atributo 'autoplay' foi removido da tag <video> no HTML,
-            // o vídeo só começará a tocar agora, após este clique.
-            // A linha 'videoAniversario.muted = false;' acima garante que ele toque com som.
             videoAniversario.play().catch(error => {
                 console.error("Erro ao tentar reproduzir o vídeo após clique no presente:", error);
                 // Navegadores podem ter políticas estritas sobre autoplay com som.
@@ -120,6 +124,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 // permitirão que o usuário dê play manualmente.
             });
         });
+
+        // Evento para quando o vídeo terminar
+        videoAniversario.addEventListener('ended', () => {
+            // 1. Remove a classe 'visible' para iniciar a animação de "saída"
+            videoWrapper.classList.remove('visible');
+
+            // 2. Aguarda a transição de saída terminar antes de esconder o vídeo e mostrar o presente
+            // A duração da transição de transform é 0.4s (400ms)
+            setTimeout(() => {
+                videoWrapper.style.display = 'none'; // Esconde o contêiner do vídeo
+                areaPresente.style.display = 'block'; // Mostra a área do presente novamente
+                
+                // Opcional: Resetar o vídeo para o início caso o usuário queira ver de novo
+                videoAniversario.currentTime = 0;
+                // videoAniversario.load(); // Se quiser recarregar, útil se tiver poster
+            }, 400); // Deve corresponder à duração da transição mais longa (transform: 0.4s)
+        });
+
     } else {
         // Log para ajudar a identificar se algum elemento do presente/vídeo não foi encontrado
         console.warn('Não foi possível inicializar a funcionalidade do presente/vídeo. Elementos ausentes:');

@@ -5,12 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convite 15 Anos - Dani e Gabi!</title>
     <link rel="stylesheet" href="style.css"> <!-- Caminho corrigido -->
+    <style>
+        /* Estilos para o contêiner do vídeo vertical */
+        /* Aplicando ao ID #videoWrapper para especificidade e para não afetar outros .video-container */
+        #videoWrapper {
+            width: 100%; /* Faz o contêiner ocupar a largura disponível do seu elemento pai */
+            max-width: 270px;  /* Define uma largura máxima (ex: 270px para um aspecto 9:16 resultaria em 480px de altura) */
+            aspect-ratio: 9 / 16; /* Mantém a proporção vertical de 9:16. O navegador calculará a altura. */
+            /* A propriedade height não é mais necessária aqui, pois aspect-ratio cuidará disso. */
+            overflow: hidden; /* Garante que o vídeo não transborde */
+            background-color: #000; /* Fundo para o caso de 'object-fit: contain' ou carregamento */
+            margin: 20px auto; /* Opcional: centraliza o contêiner do vídeo e adiciona margem */
+            /* Estado inicial para a animação de "saltar" - display: none; é definido inline no HTML */
+            opacity: 0;
+            transform: scale(0.8) translateY(30px); /* Começa menor e um pouco abaixo */
+            transition: opacity 0.3s ease-out, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            /* cubic-bezier para um efeito de "salto/mola" */
+        }
+
+        #videoWrapper.visible { /* Classe a ser adicionada via JavaScript para mostrar e animar */
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        #videoAniversario {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz o vídeo preencher o contêiner, cortando se necessário.
+                                  Use 'contain' para ver o vídeo inteiro com possíveis barras. */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <!-- Imagem Central do Convite -->
         <!-- Substitua 'caminho/para/sua/imagem-central.jpg' pelo caminho real da sua imagem -->
-        <img src="./fotoperfil1.jpeg" alt="Convite Dani e Gabi 15 Anos" class="convite-imagem-principal">
+        <img src="./gabidani.jpeg" alt="Convite Dani e Gabi 15 Anos" class="convite-imagem-principal">
 
         <div id="balloonGameSection">
             <h2>Hora da Diversão!</h2>
@@ -27,7 +57,7 @@
             <div class="presente-video-wrapper">
                 <!-- Área do Presente Clicável -->
                 <div id="areaPresente">
-                    <p>Oi Pessoal! Preparamos uma mensagem em vídeo super especial para você! Clique no presente para assistir.</p>
+                    <p>Oi Pessoal! Preparamos uma mensagem super especial para você! Clique no presente para assistir.</p>
                     <!--
                         IMPORTANTE: Substitua 'gift-image.png' pelo caminho real da sua imagem de presente.
                         Você pode usar uma imagem local (ex: ./images/presente.png) ou um link de uma imagem online.
@@ -38,9 +68,9 @@
 
                 <!-- Contêiner do Vídeo (originalmente .video-container), inicialmente oculto -->
                 <div id="videoWrapper" class="video-container" style="display: none;">
-                    <!-- O vídeo original é mantido aqui -->
-                    <video id="videoAniversario" width="560" height="315" controls>
-                        <source src="video.mp4" type="video/mp4"> <!-- Caminho corrigido -->
+                    <!-- Vídeo ajustado para preencher o contêiner vertical -->
+                    <video id="videoAniversario" controls>
+                        <source src="convite.mp4" type="video/mp4"> <!-- Caminho corrigido -->
                         Seu navegador não suporta o elemento de vídeo.
                     </video>
                 </div>
